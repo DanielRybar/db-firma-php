@@ -7,16 +7,23 @@
   
 <body>
 <?php
-  $conn = new mysqli("localhost", "root", "", "firma");
-
-  if($conn->connect_error) {
-      die("ERROR: Pripojeni selhalo. " . $conn->connect_error);
-  }
-    
-  $Jmeno = $_REQUEST['Jmeno'];
-  $Prijmeni = $_REQUEST['Prijmeni'];
-  $Email = $_REQUEST['Email'];
-  $Telefon = $_REQUEST['Telefon'];
+$conn = new mysqli("localhost", "root", "");
+try {
+  $sql = "CREATE Database IF NOT EXISTS firma";
+  if ($conn->query($sql) === TRUE) {
+    echo "";
+  } 
+}
+catch (Exception $exc)
+{
+  echo "Nepovedlo se vytvořit databázi.";
+}
+$conn = new mysqli("localhost", "root", "", "firma");
+  
+$Jmeno = $_REQUEST['Jmeno'];
+$Prijmeni = $_REQUEST['Prijmeni'];
+$Email = $_REQUEST['Email'];
+$Telefon = $_REQUEST['Telefon'];
 
 $JmenoErr = $PrijmeniErr = $EmailErr = $TelefonErr = "";
 $Jmeno = $Prijmeni = $Email = $Telefon = "";
@@ -27,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo $JmenoErr;
   } 
   elseif (!empty($_POST["Jmeno"])) {
-    if (!preg_match("/^[A-Z][a-z ]+(?:[ ]+[a-zA-Z][a-z]+)*$/",$_POST["Jmeno"])) {
-      $JmenoErr = "Muzes zadat jen pismena.";
+    if (!preg_match("/^[A-Ž[a-ž ]+(?:[ ]+[a-žA-Ž][a-ž]+)*$/",$_POST["Jmeno"])) {
+      $JmenoErr = "Jmeno: muzes zadat jen pismena.";
       echo $JmenoErr;
     } 
     else {
@@ -41,8 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo $PrijmeniErr;
   } 
   elseif (!empty($_POST["Prijmeni"])) {
-    if (!preg_match("/^[A-Z][a-z ]+(?:[ ]+[a-zA-Z][a-z]+)*$/",$_POST["Prijmeni"])) {
-      $PrijmeniErr = "Muzes zadat jen pismena.";
+    if (!preg_match("/^[A-Ž[a-ž ]+(?:[ ]+[a-žA-Ž][a-ž]+)*$/",$_POST["Prijmeni"])) {
+      $PrijmeniErr = "Prijmeni: muzes zadat jen pismena.";
       echo $PrijmeniErr;
     }
     else {
@@ -82,16 +89,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 if(!$conn->connect_error and $JmenoErr == "" and $PrijmeniErr == "" and $EmailErr == "" and $TelefonErr == "") 
 {
-  $sql = "INSERT INTO `zakaznici` (Jmeno, Prijmeni, Email, Telefon) 
-  VALUES ('".$Jmeno."', '".$Prijmeni."', '".$Email."', '".$Telefon."')";
-  
-  if ($conn->query($sql) === TRUE) {
-    echo "Data vložena do tabulky";
-  } 
-  else {
-    echo "Chyba: " . $sql . "<br><br>" . $conn->error;
-    //echo "Data nebyla vložena";
+  try {
+    $sql = "CREATE TABLE IF NOT EXISTS zakaznici (
+      ID INT(11) AUTO_INCREMENT PRIMARY KEY,
+      Jmeno VARCHAR(20) NOT NULL,
+      Prijmeni VARCHAR(30) NOT NULL,
+      Email VARCHAR(50) NOT NULL,
+      Telefon TEXT(20) NOT NULL
+      )";
+    if ($conn->query($sql) === TRUE) {
+      //echo "Tabulka vytvořena.";
+      $sql = "INSERT INTO `zakaznici` (Jmeno, Prijmeni, Email, Telefon) 
+      VALUES ('".$Jmeno."', '".$Prijmeni."', '".$Email."', '".$Telefon."')";
+      if ($conn->query($sql) === TRUE) {
+        echo " Data přidána.";
+      }
+      else {
+        echo "Vložení nebylo úspěšné.";
+      }
+    }
   }
+  catch (Exception $ex)
+  {
+    echo "Vložení nebylo úspěšné.";
+  } 
 }
 
 else {
