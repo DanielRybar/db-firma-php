@@ -1,0 +1,16 @@
+fieldset {
+    font-size: 16px;
+    padding: 12px;
+    width: 350px;
+    line-height: 1;
+}
+
+legend {
+    margin: 0 auto;
+}
+
+/* pouziti flexboxu na vycentrovani */
+.center {
+    display: flex;
+    justify-content: center;
+}

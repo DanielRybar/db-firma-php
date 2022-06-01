@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./styles/site.css">
+  <title>Petra Vaverková</title>
+</head>
+
+<body>
+  <div class="center">
+    <form name="myForm" action="insert.php" method="post">
+      <fieldset>
+        <legend>Zadej své osobní informace:</legend>
+        <table>
+          <tr>
+            <td>Jméno:</td>
+            <td><input type="text" name="Jmeno" required id="Jmeno"></td>
+          </tr>
+
+          <tr>
+            <td>Příjmení:</td>
+            <td><input type="text" name="Prijmeni" required id="Prijmeni"></td>
+          </tr>
+
+          <tr>
+            <td>Email:</td>
+            <td><input type="text" name="Email" required id="Email"></td>
+          </tr>
+
+          <tr>
+            <td>Telefonní číslo: +420</td>
+            <td><input type="text" name="Telefon" required id="Telefon"></td>
+          </tr>
+
+          <tr>
+            <td><input type="submit" name="Odeslat" value="Odeslat"></td>
+            <td><input type="reset" name="Odstranit" value="Smazat vše"></td>
+          </tr>
+        </table>
+      </fieldset>
+    </form>
+  </div>
+</body>
+
+</html>
